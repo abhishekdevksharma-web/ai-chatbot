@@ -10,16 +10,20 @@ function Input() {
   const { chat, setchat, isAiResponding, setisAiResponding, userMessage } =
     context;
 
-  const [longChar, setlongChar] = useState(false);
+  const [longChar, setlongChar] = useState(true);
   const [recordingState, setrecordingState] = useState({
     isRecording: false,
     placeholder: "Ask anything...",
   });
   const [value, setValue] = useState("");
+  const [valueLength, setvalueLength] = useState(0);
+  useEffect(() => {
+    setvalueLength(value.length);
+  }, [value]);
 
   async function sendmessage() {
     setchat([...chat, { user: value, ai: " " }]);
-    setValue(" ");
+    setValue("");
     const content = await userMessage(value);
     setchat((prev) => {
       const updated = [...prev];
@@ -48,9 +52,7 @@ function Input() {
       placeholder: "Speak What Do You Search....",
       isRecording: true,
     });
-
     SpeechRecognition.startListening();
-    return () => clearInterval(interval);
   }
   function endRecording() {
     setrecordingState({
@@ -60,15 +62,14 @@ function Input() {
     SpeechRecognition.stopListening();
   }
 
- 
-
   return (
     <div
       className={`p-2 bg-[#2e2e2e] rounded-full shadow-md border ${
-        listening ? "border-white animate-glow" : "border-gray-700"
+        listening ? "border-white animate-glow" : "border-gray-600"
       }`}
     >
-      {longChar && (
+      {/* this is for when text is long and get goes top */}
+      {/* {longChar && (
         <input
           value={value}
           onChange={onchange}
@@ -76,9 +77,13 @@ function Input() {
           type="text"
           placeholder="Ask anything..."
         />
-      )}
+      )} */}
       <div className="flex justify-center">
-        <button className="hover:bg-gray-500 rounded-full text-white cursor-pointer p-3">
+        <button
+          aria-label="Not Develop"
+          title="Not Develop"
+          className="hover:bg-white/5 rounded-full text-white cursor-pointer p-3 "
+        >
           <Plus size={18} color="#ffffff" strokeWidth={1.25} />
         </button>
         <input
@@ -91,7 +96,7 @@ function Input() {
           }
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              sendmessage(e.target.value); 
+              sendmessage(e.target.value);
             }
           }}
           // placeholder={`Typing${".".repeat(dots)}`}
@@ -99,25 +104,34 @@ function Input() {
         {!listening ? (
           <button
             onClick={startRecording}
-            className="hover:bg-gray-500 rounded-full p-3 cursor-pointer"
+            className=" hover:bg-white/5 rounded-full p-3 cursor-pointer"
           >
             <Mic color="#ffffff" strokeWidth={1.25} size={18} />
           </button>
         ) : (
           <button
             onClick={endRecording}
-            className="hover:bg-gray-500 rounded-full p-3 cursor-pointer"
+            className="hover:bg-white/5 rounded-full p-3 cursor-pointer"
           >
             <CircleStop color="#ffffff" strokeWidth={1.25} size={18} />
           </button>
         )}
         <button
+          // disabled={`${value == 3 ? true : false}`}
+          disabled={!valueLength >= 1}
+          aria-label=""
           onClick={(e) => {
             sendmessage();
           }}
-          className="hover:bg-gray-500 rounded-full p-3 cursor-pointer"
+          className={`  rounded-full p-3 cursor-pointer hover:bg-white/5${
+            valueLength >= 1 ? "bg-white" : " "
+          }`}
         >
-          <Send color="#ffffff" strokeWidth={1.25} size={18} />
+          {valueLength >= 1 ? (
+            <Send color="#000000" strokeWidth={1.25} size={18} />
+          ) : (
+            <Send color="#ffffff" strokeWidth={1.25} size={18} />
+          )}
         </button>
       </div>
     </div>

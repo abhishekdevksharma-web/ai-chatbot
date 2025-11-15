@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
-import UserContext from "../context/User/userContext";
 
 function UserChat(props) {
-  const context = useContext(UserContext);
-  const { isAiResponding, setisAiResponding } = context; 
+  // const data = props.chat.ai[0];
+  // let edit_data = data.split("```");
+  // console.log(edit_data);
+
+  
 
   return (
     <div className="w-full p-3 flex flex-col gap-4">
@@ -25,7 +27,7 @@ function UserChat(props) {
           </div>
         )} */}
         {
-          <pre className=" bg-gray-700 text-white px-4 py-2 rounded-2xl text-xs whitespace-pre-wrap  overflow-auto p-3 rounded-lgz">
+          <pre className=" bg-gray-700 text-white px-4 py-2 rounded-2xl text-xs whitespace-pre-wrap  overflow-auto p-3 rounded-lgz inline-block">
             {props.chat.ai}
           </pre>
         }

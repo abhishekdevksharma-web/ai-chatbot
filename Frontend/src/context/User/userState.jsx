@@ -2,8 +2,7 @@ import { useState } from "react";
 import UserContext from "./userContext";
 
 function UserState(props) {
-  const [chat, setchat] = useState([]);
-  const [isAiResponding, setisAiResponding] = useState(false);
+  const [chat, setchat] = useState([]); 
   const [userChat, setUserChat] = useState("");
   const [userAiChat, setUserAiChat] = useState("");
 
@@ -31,9 +30,7 @@ function UserState(props) {
         userAiChat,
         setUserAiChat,
         chat,
-        setchat,
-        isAiResponding,
-        setisAiResponding,
+        setchat, 
       }}
     >
       {props.children}
